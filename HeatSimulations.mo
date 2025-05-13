@@ -465,6 +465,10 @@ First implementation.
       Placement(transformation(origin = {222, -42}, extent = {{-8, -8}, {8, 8}}, rotation = 90)));
   Buildings.Fluid.Sources.MassFlowSource_T boundary2(redeclare package Medium = Medium1, T = 283.15, m_flow = 0.5, nPorts = 1)  annotation(
       Placement(transformation(origin = {252, -28}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
+  BuildingSystems.Electrical.AC.ThreePhasesBalanced.Loads.Inductive load(use_pf_in = true) annotation(
+      Placement(transformation(origin = {-28, -110}, extent = {{-10, -10}, {10, 10}})));
+  BuildingSystems.Electrical.AC.ThreePhasesBalanced.Sources.FixedVoltage fixVol(V = 480, f = 60, phiSou = 0.3490658503988659) annotation(
+      Placement(transformation(origin = {-68, -110}, extent = {{-10, -10}, {10, 10}})));
   equation
     der(EGrid) = battery.PGrid;
     der(EPVField) = pvField.PField;
@@ -536,12 +540,16 @@ First implementation.
       Line(points = {{186, 28}, {186, 76}, {100, 76}, {100, 50}}, color = {191, 0, 0}));
     connect(boundary.T_in, ambience.TAirRef) annotation(
       Line(points = {{8, -88}, {0, -88}, {0, 48}, {66, 48}}, color = {0, 0, 127}));
-  connect(pump11.port_b, bou2.ports[1]) annotation(
+    connect(pump11.port_b, bou2.ports[1]) annotation(
       Line(points = {{162, 20}, {162, -34}, {222, -34}}, color = {0, 127, 255}));
-  connect(bou2.X_in, hotWaterConsumption.y) annotation(
+    connect(bou2.X_in, hotWaterConsumption.y) annotation(
       Line(points = {{225, -52}, {224.5, -52}, {224.5, -76}, {215, -76}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(boundary2.ports[1], storage.port_a2) annotation(
+    connect(boundary2.ports[1], storage.port_a2) annotation(
       Line(points = {{252, -18}, {252, -6}, {66, -6}, {66, -12}}, color = {0, 127, 255}));
+    connect(fixVol.terminal, load.terminal) annotation(
+      Line(points = {{-58, -110}, {-38, -110}}, color = {0, 170, 0}));
+  connect(load.pf_in, battery.PGrid) annotation(
+      Line(points = {{-18, -104}, {-10, -104}, {-10, -70}, {-18, -70}}, color = {0, 0, 127}));
     annotation(
       experiment(StartTime = 0, StopTime = 31536000),
       __Dymola_Commands(file = "modelica://BuildingSystems/Resources/Scripts/Dymola/Applications/AirConditioningSystems/PhotovoltaicCoolingSystem.mos" "Simulate and plot"),
@@ -586,11 +594,11 @@ First implementation.
       Placement(transformation(extent = {{-72, 12}, {-52, 32}})));
     BuildingSystems.Technologies.ElectricalStorages.BatterySimple battery(redeclare BuildingSystems.Technologies.ElectricalStorages.Data.LeadAcid.LeadAcidGeneric batteryData, nBat = 3) annotation(
       Placement(transformation(origin = {4, -74}, extent = {{-38, -10}, {-18, 10}})));
-    BuildingSystems.Buildings.BuildingTemplates.Building1Zone1DDistrict building(calcIdealLoads = false, heatSources = true, nHeatSources = 1, angleDegAziBuilding = 0.0, width = 10, length = 14, heightSto = 2.8, nSto = 3, ARoom = 70, widthWindow1 = 4.0, heightWindow1 = 2*1.2, widthWindow2 = 4.0, heightWindow2 = 2*1.2, widthWindow3 = 4.0, heightWindow3 = 2*1.2, widthWindow4 = 4.0, heightWindow4 = 2*1.2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall3, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall4, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.BasePlateMultistorey1958to1968 constructionBottom, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallMultistorey1958to1968 constructionWallsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateCeilingMultistorey1958to1968 constructionCeilingsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow2, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow3, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow4, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.RoofRowhouse1918 constructionCeiling, BCWall1 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall2 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall3 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall4 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCCeiling = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience) "6 bytů. každý 70m^2" annotation(
+    BuildingSystems.Buildings.BuildingTemplates.Building1Zone1DDistrict building(calcIdealLoads = false, heatSources = true, nHeatSources = 1, angleDegAziBuilding = 0.0, width = 10, length = 14, heightSto = 2.8, nSto = 3, ARoom = 70, widthWindow1 = 6, heightWindow1 = 2*1.2, widthWindow2 = 6, heightWindow2 = 2*1.2, widthWindow3 = 6, heightWindow3 = 2*1.2, widthWindow4 = 6, heightWindow4 = 2*1.2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall3, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall4, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.BasePlateMultistorey1958to1968 constructionBottom, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallMultistorey1958to1968 constructionWallsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateCeilingMultistorey1958to1968 constructionCeilingsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow2, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow3, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow4, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.RoofRowhouse1918 constructionCeiling, BCWall1 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall2 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall3 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall4 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCCeiling = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience) "6 bytů. každý 70m^2" annotation(
       Placement(transformation(extent = {{88, 30}, {108, 50}})));
     BuildingSystems.Buildings.Ambience ambience(nSurfaces = building.nSurfacesAmbience, redeclare block WeatherData = BuildingSystems.Climate.WeatherDataMeteonorm.Germany_Berlin_Meteonorm_ASCII) "Ambience model" annotation(
       Placement(transformation(extent = {{64, 30}, {84, 50}})));
-    Modelica.Blocks.Sources.Constant airchange(k = 0.5) annotation(
+    Modelica.Blocks.Sources.Constant airchange(k = 1.5) "větrání, kolikrát za hodinu se vymění objem vzducuhu v budově" annotation(
       Placement(transformation(origin = {116, 44}, extent = {{-2, -2}, {2, 2}}, rotation = 180)));
     Modelica.Units.SI.Energy EGrid(start = 0.0) "Integrates the electricity taken from the grid";
     Modelica.Units.SI.Energy EPVField(start = 0.0) "Integrates the electricity generated by the PV field";
@@ -604,17 +612,17 @@ First implementation.
       Placement(transformation(origin = {36, -26}, extent = {{-10, -10}, {10, 10}})));
     Modelica.Blocks.Sources.Constant dpSet(k = 150000.0) annotation(
       Placement(transformation(origin = {254, -22}, extent = {{-204, 18}, {-216, 30}})));
-    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium2, height = 2) annotation(
+    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium2, height = 2, thickness_wall = 0.1) annotation(
       Placement(transformation(origin = {72, -22}, extent = {{10, -10}, {-10, 10}})));
-    Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 35.0) annotation(
+    Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 70.0) annotation(
       Placement(transformation(origin = {62, 56}, extent = {{44, -112}, {36, -104}})));
-    BuildingSystems.Fluid.Storage.ExpansionVessel exp(redeclare package Medium = Medium1, V_start = 1, p_start = 2e5) annotation(
+    BuildingSystems.Fluid.Storage.ExpansionVessel exp(redeclare package Medium = Medium1, V_start = 2, p_start = 2e5, T_start = 283.15) annotation(
       Placement(transformation(origin = {164, -58}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort temp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {122, -24}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 6000, TAir_nominal(displayUnit = "K"), TRad_nominal(displayUnit = "K"), T_a_nominal(displayUnit = "K") = 308.15, T_b_nominal(displayUnit = "K") = 298.15, dp_nominal = 1000, m_flow_nominal = 0.5, p_start = 1.5e5) annotation(
       Placement(transformation(origin = {188, 20}, extent = {{-10, -10}, {10, 10}})));
-    BuildingSystems.Fluid.Storage.ExpansionVessel exp1(redeclare package Medium = Medium1, V_start = 0.05, p_start = 1.5e5) annotation(
+    BuildingSystems.Fluid.Storage.ExpansionVessel exp1(redeclare package Medium = Medium1, V_start = 0.1, p_start = 1.5e5) annotation(
       Placement(transformation(origin = {256, 30}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Movers.FlowControlled_dp pump11(redeclare package Medium = Medium1, m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true, p_start = 1.5e5) annotation(
       Placement(transformation(origin = {152, 20}, extent = {{-10, -10}, {10, 10}})));
@@ -622,10 +630,6 @@ First implementation.
       Placement(transformation(origin = {380, 26}, extent = {{-204, 18}, {-216, 30}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort radTemp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {220, 20}, extent = {{-10, -10}, {10, 10}})));
-  BuildingSystems.Electrical.AC.ThreePhasesBalanced.Loads.Inductive load(use_pf_in = true) annotation(
-      Placement(transformation(origin = {-28, -110}, extent = {{-10, -10}, {10, 10}})));
-  BuildingSystems.Electrical.AC.ThreePhasesBalanced.Sources.FixedVoltage fixVol(f = 60, V = 480, phiSou = 0.3490658503988659)  annotation(
-      Placement(transformation(origin = {-68, -110}, extent = {{-10, -10}, {10, 10}})));
   equation
     der(EGrid) = battery.PGrid;
     der(EPVField) = pvField.PField;
@@ -695,16 +699,8 @@ First implementation.
       Line(points = {{186, 28}, {186, 76}, {100, 76}, {100, 50}}, color = {191, 0, 0}));
     connect(boundary.T_in, ambience.TAirRef) annotation(
       Line(points = {{8, -88}, {0, -88}, {0, 48}, {66, 48}}, color = {0, 0, 127}));
-    connect(fixVol.terminal, load.terminal) annotation(
-      Line(points = {{-58, -110}, {-38, -110}}, color = {0, 170, 0}));
     connect(battery.PLoad, heatPump.P) annotation(
       Line(points = {{-18, -74}, {60, -74}}, color = {0, 0, 127}));
-    connect(battery.PGrid, load.pf_in) annotation(
-      Line(points = {{-18, -70}, {-12, -70}, {-12, -104}, {-18, -104}}, color = {0, 0, 127}));
-  connect(pump1.P, battery.PLoad) annotation(
-      Line(points = {{48, -16}, {56, -16}, {56, 12}, {-8, 12}, {-8, -74}, {-18, -74}}, color = {0, 0, 127}));
-  connect(pump11.P, battery.PLoad) annotation(
-      Line(points = {{164, 30}, {170, 30}, {170, -32}, {180, -32}, {180, -112}, {-8, -112}, {-8, -74}, {-18, -74}}, color = {0, 0, 127}));
     annotation(
       experiment(StartTime = 0, StopTime = 31536000),
       __Dymola_Commands(file = "modelica://BuildingSystems/Resources/Scripts/Dymola/Applications/AirConditioningSystems/PhotovoltaicCoolingSystem.mos" "Simulate and plot"),
