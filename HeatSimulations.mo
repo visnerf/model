@@ -728,6 +728,185 @@ First implementation.
       uses(BuildingSystems(version = "2.0.0-beta")),
     version = "");
   end CommunitySystemOnGrid;
+
+  model CommunitySystemOnGridTest "Photovoltaic cooling system"
+    extends Modelica.Icons.Example;
+    package Medium1 = BuildingSystems.Media.Water;
+    package Medium2 = BuildingSystems.Media.Air;
+    parameter Modelica.Units.SI.TemperatureDifference dTEva_nominal = -5 "Temperature difference evaporator inlet-outlet";
+    parameter Modelica.Units.SI.TemperatureDifference dTCon_nominal = 10 "Temperature difference condenser outlet-inlet";
+    parameter Modelica.Units.SI.HeatFlowRate QCon_flow_nominal = 100E3 "Evaporator heat flow rate";
+    parameter Modelica.Units.SI.MassFlowRate m1_flow_nominal = QCon_flow_nominal/dTCon_nominal/4200 "Nominal mass flow rate at condenser";
+    parameter Modelica.Units.SI.MassFlowRate m_flow_nominal = 0.5 "Nominal mass flow rate";
+    parameter Modelica.Units.SI.MassFlowRate m_flow = 0.5 "Mass flow rate in the cold water production and consumption loop";
+    BuildingSystems.Technologies.Photovoltaics.PVModules.PVModuleSimpleMPP pvField(redeclare BuildingSystems.Technologies.Photovoltaics.Data.PhotovoltaicModules.TSM230PC05 pvModuleData, angleDegTil_constant = 30.0, angleDegAzi_constant = 0.0, nModPar = 8,
+      nModSer=10)                                                                                                                                                                                                         annotation(
+      Placement(transformation(extent = {{-54, -18}, {-34, 2}})));
+    BuildingSystems.Climate.SolarRadiationTransformers.SolarRadiationTransformerIsotropicSky radiation(rhoAmb = 0.2, angleDegL = 0.0) annotation(
+      Placement(transformation(extent = {{-72, 12}, {-52, 32}})));
+    BuildingSystems.Technologies.ElectricalStorages.BatterySimple battery(redeclare BuildingSystems.Technologies.ElectricalStorages.Data.LeadAcid.LeadAcidGeneric batteryData, nBat = 3) annotation(
+      Placement(transformation(origin={6,-74},    extent = {{-38, -10}, {-18, 10}})));
+    BuildingSystems.Buildings.BuildingTemplates.Building1Zone1DDistrict building(calcIdealLoads = false,
+      heatSources=false,                                                                                                                       angleDegAziBuilding = 0.0, width = 10, length = 14, heightSto = 2.8, nSto = 3, ARoom = 70, widthWindow1 = 6, heightWindow1 = 2*1.2, widthWindow2 = 6, heightWindow2 = 2*1.2, widthWindow3 = 6, heightWindow3 = 2*1.2, widthWindow4 = 6, heightWindow4 = 2*1.2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall3, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall4, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.BasePlateMultistorey1958to1968 constructionBottom, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallMultistorey1958to1968 constructionWallsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateCeilingMultistorey1958to1968 constructionCeilingsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow2, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow3, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow4, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.RoofRowhouse1918 constructionCeiling, BCWall1 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall2 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall3 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall4 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCCeiling = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience) "6 bytů. každý 70m^2" annotation(
+      Placement(transformation(extent = {{88, 30}, {108, 50}})));
+    BuildingSystems.Buildings.Ambience ambience(nSurfaces = building.nSurfacesAmbience, redeclare block WeatherData = BuildingSystems.Climate.WeatherDataMeteonorm.Germany_Berlin_Meteonorm_ASCII) "Ambience model" annotation(
+      Placement(transformation(extent = {{64, 30}, {84, 50}})));
+    Modelica.Blocks.Sources.Constant airchange(k = 1.5) "větrání, kolikrát za hodinu se vymění objem vzducuhu v budově" annotation(
+      Placement(transformation(origin = {116, 44}, extent = {{-2, -2}, {2, 2}}, rotation = 180)));
+    Modelica.Units.SI.Energy EGrid(start = 0.0) "Integrates the electricity taken from the grid";
+    Modelica.Units.SI.Energy EPVField(start = 0.0) "Integrates the electricity generated by the PV field";
+    BuildingSystems.Fluid.Sources.Boundary_pT bou1(redeclare package Medium = Medium2, nPorts = 1) annotation(
+      Placement(transformation(origin = {108, -80}, extent = {{6, -6}, {-6, 6}})));
+    BuildingSystems.Fluid.Sources.MassFlowSource_T boundary(redeclare package Medium = Medium2, m_flow = 0.5, nPorts = 1, use_T_in = true) annotation(
+      Placement(transformation(origin = {20, -92}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.HeatPumps.Carnot_TCon heatPump(redeclare package Medium1 = Medium1, redeclare package Medium2 = Medium2, QCon_flow_nominal = 5000, allowFlowReversal1 = false, allowFlowReversal2 = false, dTCon_nominal = dTCon_nominal, dTEva_nominal = dTEva_nominal, dp1_nominal = 1000, dp2_nominal = 1000, show_T = true) annotation(
+      Placement(transformation(origin = {70, -74}, extent = {{10, -10}, {-10, 10}})));
+    BuildingSystems.Fluid.Movers.FlowControlled_dp pump1(redeclare package Medium = Medium1,
+      addPowerToMedium=false,                                                                m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true) annotation(
+      Placement(transformation(origin = {36, -26}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Blocks.Sources.Constant dpSet(k = 150000.0) annotation(
+      Placement(transformation(origin = {254, -22}, extent = {{-204, 18}, {-216, 30}})));
+    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium2, height = 2, thickness_wall = 0.1) annotation(
+      Placement(transformation(origin = {72, -22}, extent = {{10, -10}, {-10, 10}})));
+    Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 70.0) annotation(
+      Placement(transformation(origin = {62, 56}, extent = {{44, -112}, {36, -104}})));
+    BuildingSystems.Fluid.Storage.ExpansionVessel exp(redeclare package Medium = Medium1, V_start = 2, p_start = 2e5, T_start = 283.15) annotation(
+      Placement(transformation(origin = {164, -58}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort temp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {122, -24}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 6000, TAir_nominal(displayUnit = "K"), TRad_nominal(displayUnit = "K"), T_a_nominal(displayUnit = "K") = 308.15, T_b_nominal(displayUnit = "K") = 298.15, dp_nominal = 1000, m_flow_nominal = 0.5, p_start = 1.5e5) annotation(
+      Placement(transformation(origin = {188, 20}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Storage.ExpansionVessel exp1(redeclare package Medium = Medium1, V_start = 0.1, p_start = 1.5e5) annotation(
+      Placement(transformation(origin = {256, 30}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Movers.FlowControlled_dp pump11(redeclare package Medium = Medium1,
+      addPowerToMedium=false,                                                                 m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true,
+      p_start=150000)                                                                                                                                                                annotation(
+      Placement(transformation(origin = {152, 20}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Blocks.Sources.Constant dpSet1(k = 150000.0) annotation(
+      Placement(transformation(origin = {380, 26}, extent = {{-204, 18}, {-216, 30}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort radTemp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {220, 20}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=
+          293.15)
+      annotation (Placement(transformation(extent={{108,102},{128,122}})));
+    Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalConductor(
+        G=1)
+      annotation (Placement(transformation(extent={{156,104},{176,124}})));
+    Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalConductor1
+      (G=1000)
+      annotation (Placement(transformation(extent={{156,80},{176,100}})));
+  equation
+    der(EGrid) = battery.PGrid;
+    der(EPVField) = pvField.PField;
+    connect(radiation.radiationPort, pvField.radiationPort) annotation(
+      Line(points={{-54,22},{-44,22},{-44,0}},            color = {255, 255, 0}, smooth = Smooth.None));
+    connect(pvField.PField, battery.PCharge) annotation(
+      Line(points={{-38,0},{-35.5,0},{-35.5,-74},{-27,-74}},          color = {0, 0, 127}));
+    connect(ambience.toSurfacePorts, building.toAmbienceSurfacesPorts) annotation(
+      Line(points={{83,44},{89,44}},      color = {0, 255, 0}));
+    connect(ambience.toAirPorts, building.toAmbienceAirPorts) annotation(
+      Line(points={{83,36},{89,36}},      color = {85, 170, 255}));
+    connect(building.airchange[1], airchange.y) annotation(
+      Line(points = {{107.8, 44}, {113.8, 44}}, color = {0, 0, 127}));
+    connect(ambience.TAirRef, building.TAirAmb) annotation(
+      Line(points={{65,47},{62,47},{62,56},{104.2,56},{104.2,49.8}},              color = {0, 0, 127}));
+    connect(ambience.xAir, building.xAirAmb) annotation(
+      Line(points={{65,45},{60,45},{60,60},{106.4,60},{106.4,49.8}},              color = {0, 0, 127}));
+    connect(ambience.IrrDirHor, radiation.IrrDirHor) annotation(
+      Line(points={{65,43},{-74,43},{-74,28},{-69.6,28}},            color = {0, 0, 127}));
+    connect(radiation.IrrDifHor, ambience.IrrDifHor) annotation(
+      Line(points={{-69.6,24},{-76,24},{-76,42},{65,42},{65,41}},                color = {0, 0, 127}));
+    connect(ambience.TAirRef, pvField.TAmb) annotation(
+      Line(points={{65,47},{-42,47},{-42,0}},          color = {0, 0, 127}));
+    connect(pvField.angleDegTil, radiation.angleDegTil) annotation(
+      Line(points = {{-50, 0}, {-76, 0}, {-76, 20}, {-69.6, 20}}, color = {0, 0, 127}));
+    connect(pvField.angleDegAzi, radiation.angleDegAzi) annotation(
+      Line(points = {{-50, -2}, {-50, -2}, {-76, -2}, {-76, 16}, {-69.6, 16}}, color = {0, 0, 127}));
+    connect(ambience.latitudeDeg, radiation.latitudeDeg) annotation(
+      Line(points = {{67, 49}, {67, 64}, {-65.8, 64}, {-65.8, 29.6}}, color = {0, 0, 127}));
+    connect(ambience.longitudeDeg, radiation.longitudeDeg) annotation(
+      Line(points = {{69, 49}, {69, 64}, {-62, 64}, {-62, 29.6}}, color = {0, 0, 127}));
+    connect(ambience.longitudeDeg0, radiation.longitudeDeg0) annotation(
+      Line(points = {{71, 49}, {71, 64}, {-58, 64}, {-58, 29.6}}, color = {0, 0, 127}));
+    connect(heatPump.port_b2, bou1.ports[1]) annotation(
+      Line(points = {{80, -80}, {102, -80}}, color = {0, 127, 255}));
+    connect(heatPump.port_a2, boundary.ports[1]) annotation(
+      Line(points = {{60, -80}, {45, -80}, {45, -92}, {30, -92}}, color = {0, 127, 255}));
+    connect(dpSet.y, pump1.dp_in) annotation(
+      Line(points={{37.4,2},{37.4,-14},{36,-14}},    color = {0, 0, 127}));
+    connect(heatPump.port_b1, pump1.port_a) annotation(
+      Line(points = {{60, -68}, {8, -68}, {8, -26}, {26, -26}}, color = {0, 127, 255}));
+    connect(pump1.port_b, storage.port_HX_1_a) annotation(
+      Line(points = {{46, -26}, {65, -26}}, color = {0, 127, 255}));
+    connect(storage.port_HX_1_b, temp.port_a) annotation(
+      Line(points = {{65, -28}, {54, -28}, {54, -42}, {88, -42}, {88, -24}, {112, -24}}, color = {0, 127, 255}));
+    connect(temp.port_b, heatPump.port_a1) annotation(
+      Line(points = {{132, -24}, {148, -24}, {148, -68}, {80, -68}}, color = {0, 127, 255}));
+    connect(TSet.y, heatPump.TSet) annotation(
+      Line(points={{97.6,-52},{82,-52},{82,-65}},      color = {0, 0, 127}));
+    connect(exp.port_a, heatPump.port_a1) annotation(
+      Line(points = {{164, -68}, {80, -68}}, color = {0, 127, 255}));
+    connect(radiator.port_a, pump11.port_b) annotation(
+      Line(points = {{178, 20}, {162, 20}}, color = {0, 127, 255}));
+    connect(dpSet1.y, pump11.dp_in) annotation(
+      Line(points={{163.4,50},{152,50},{152,32}},            color = {0, 0, 127}));
+    connect(radTemp.port_a, radiator.port_b) annotation(
+      Line(points = {{210, 20}, {198, 20}}, color = {0, 127, 255}));
+    connect(radTemp.port_b, exp1.port_a) annotation(
+      Line(points = {{230, 20}, {256, 20}}, color = {0, 127, 255}));
+    connect(storage.port_a1, pump11.port_a) annotation(
+      Line(points = {{79, -31}, {86, -31}, {86, 20}, {142, 20}}, color = {0, 127, 255}));
+    connect(exp1.port_a, storage.port_a2) annotation(
+      Line(points = {{256, 20}, {256, -6}, {65, -6}, {65, -13}}, color = {0, 127, 255}));
+    connect(boundary.T_in, ambience.TAirRef) annotation(
+      Line(points={{8,-88},{0,-88},{0,47},{65,47}},          color = {0, 0, 127}));
+    connect(battery.PLoad, heatPump.P) annotation(
+      Line(points={{-17,-74},{59,-74}},      color = {0, 0, 127}));
+    connect(fixedTemperature.port, thermalConductor.port_a) annotation (Line(
+        points={{128,112},{144,112},{144,114},{156,114}},
+        color={191,0,0},
+        smooth=Smooth.Bezier));
+    connect(thermalConductor1.port_a, fixedTemperature.port) annotation (Line(
+        points={{156,90},{138,90},{138,112},{128,112}},
+        color={191,0,0},
+        smooth=Smooth.Bezier));
+    connect(thermalConductor1.port_b, radiator.heatPortCon) annotation (Line(
+        points={{176,90},{182,90},{186,90},{186,27.2}},
+        color={191,0,0},
+        smooth=Smooth.Bezier));
+    connect(thermalConductor.port_b, radiator.heatPortRad) annotation (Line(
+        points={{176,114},{184,114},{190,114},{190,27.2}},
+        color={191,0,0},
+        smooth=Smooth.Bezier));
+    annotation(
+      experiment(
+        StartTime=5184000,
+        StopTime=15552000,
+        __Dymola_NumberOfIntervals=1500,
+        __Dymola_Algorithm="Dassl"),
+      __Dymola_Commands(file = "modelica://BuildingSystems/Resources/Scripts/Dymola/Applications/AirConditioningSystems/PhotovoltaicCoolingSystem.mos" "Simulate and plot"),
+    Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-80, 80}, {280, -120}})),
+      Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -40}, {100, 40}})),
+      Documentation(info = "<html>
+  <p>
+  Example that simulates a photovoltaic driven air-conditioning system:
+  The PV generator loads an electric battery. The compression chiller takes
+  the electricity from the battery, produces cold water and charges it
+  into a cold water storage. The cold water is used for the air-conditioning of a building.
+  </p>
+  </html>", revisions = "<html>
+  <ul>
+  <li>
+  August 18, 2018, by Christoph Nytsch-Geusen:<br/>
+  Adapted to possible different media for the storage content and the two internal heat exchangers.
+  </li>
+  <li>
+  May 21, 2016, by Christoph Nytsch-Geusen:<br/>
+  First implementation.
+  </li>
+  </ul>
+  </html>"));
+  end CommunitySystemOnGridTest;
   annotation(
     uses(Modelica(version = "4.0.0"), Buildings(version = "12.0.0"), BuildingSystems(version = "2.0.0-beta")));
 end HeatSimulations;
