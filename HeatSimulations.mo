@@ -283,9 +283,9 @@ First implementation.
       Placement(transformation(origin = {56, 124}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort temp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {-38, 124}, extent = {{-10, -10}, {10, 10}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TBCCon1(T(displayUnit = "K") = 283.15) annotation(
+    Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TBCCon1(T(displayUnit = "K") = 283.15) annotation(
       Placement(transformation(origin = {42, 144}, extent = {{-32, 28}, {-20, 40}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TBCRad1(T(displayUnit = "K") = 283.15) annotation(
+    Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TBCRad1(T(displayUnit = "K") = 283.15) annotation(
       Placement(transformation(origin = {42, 144}, extent = {{-32, 48}, {-20, 60}})));
   equation
     connect(TSet.y, heatPump.TSet) annotation(
@@ -296,21 +296,21 @@ First implementation.
       Line(points = {{-23, 180}, {-23, 136}, {-2, 136}}, color = {0, 0, 127}));
     connect(radTemp.port_a, radiator.port_b) annotation(
       Line(points = {{46, 124}, {36, 124}}, color = {0, 127, 255}));
-  connect(radTemp.port_b, heatPump.port_a1) annotation(
+    connect(radTemp.port_b, heatPump.port_a1) annotation(
       Line(points = {{66, 124}, {62, 124}, {62, 12}, {10, 12}}, color = {0, 127, 255}));
-  connect(temp.port_b, pump11.port_a) annotation(
+    connect(temp.port_b, pump11.port_a) annotation(
       Line(points = {{-28, 124}, {-12, 124}}, color = {0, 127, 255}));
-  connect(temp.port_a, heatPump.port_b1) annotation(
+    connect(temp.port_a, heatPump.port_b1) annotation(
       Line(points = {{-48, 124}, {-46, 124}, {-46, 12}, {-10, 12}}, color = {0, 127, 255}));
-  connect(radiator.heatPortRad, TBCRad1.port) annotation(
+    connect(radiator.heatPortRad, TBCRad1.port) annotation(
       Line(points = {{28, 132}, {40, 132}, {40, 198}, {22, 198}}, color = {191, 0, 0}));
-  connect(radiator.heatPortCon, TBCCon1.port) annotation(
+    connect(radiator.heatPortCon, TBCCon1.port) annotation(
       Line(points = {{24, 132}, {24, 178}, {22, 178}}, color = {191, 0, 0}));
-  connect(exp.port_a, heatPump.port_a1) annotation(
+    connect(exp.port_a, heatPump.port_a1) annotation(
       Line(points = {{106, 8}, {10, 8}, {10, 12}}, color = {0, 127, 255}));
-  connect(boundary.ports[1], heatPump.port_a2) annotation(
+    connect(boundary.ports[1], heatPump.port_a2) annotation(
       Line(points = {{-56, -26}, {-102, -26}, {-102, 0}, {-10, 0}}, color = {0, 127, 255}));
-  connect(heatPump.port_b2, bou1.ports[1]) annotation(
+    connect(heatPump.port_b2, bou1.ports[1]) annotation(
       Line(points = {{10, 0}, {90, 0}, {90, -24}, {70, -24}}, color = {0, 127, 255}));
     annotation(
       Diagram(coordinateSystem(extent = {{-80, 220}, {120, -40}})));
@@ -328,75 +328,117 @@ First implementation.
       Placement(transformation(origin = {0, 6}, extent = {{10, -10}, {-10, 10}})));
     Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 70.0) annotation(
       Placement(transformation(origin = {6, 130}, extent = {{44, -112}, {36, -104}})));
-    BuildingSystems.Fluid.Movers.FlowControlled_dp pump1(redeclare package Medium = Medium1, m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true, p_start = 2e5) annotation(
-      Placement(transformation(origin = {-52, 56}, extent = {{-10, -10}, {10, 10}})));
-    BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 6000, T_a_nominal(displayUnit = "K") = 313.15, T_b_nominal(displayUnit = "K") = 303.15, dp_nominal = 1000, m_flow_nominal = 0.5, TAir_nominal(displayUnit = "K"), TRad_nominal(displayUnit = "K"), p_start = 1.5e5) annotation(
-      Placement(transformation(origin = {46, 124}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 15000, T_a_nominal = 273.15 + 50, T_b_nominal = 273.15 + 40, dp_nominal = 100, TAir_nominal(displayUnit = "degC"), TRad_nominal(displayUnit = "K")) annotation(
+      Placement(transformation(origin = {54, 124}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Storage.ExpansionVessel exp(redeclare package Medium = Medium1, V_start = 1, p_start = 2e5, T_start = 283.15) annotation(
-      Placement(transformation(origin = {88, 72}, extent = {{-10, -10}, {10, 10}})));
+      Placement(transformation(origin = {102, 54}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Sources.Boundary_pT bou1(nPorts = 1, redeclare package Medium = Medium2, T = 285.15) annotation(
       Placement(transformation(origin = {0, -22}, extent = {{-10, -10}, {10, 10}})));
-    Modelica.Blocks.Sources.Constant dpSet(k = 150000.0) annotation(
-      Placement(transformation(origin = {170, 114}, extent = {{-204, 18}, {-216, 30}})));
     BuildingSystems.Fluid.Sources.MassFlowSource_T boundary(nPorts = 1, m_flow = 0.5, use_T_in = false, redeclare package Medium = Medium2, T = 283.15) annotation(
       Placement(transformation(origin = {-38, -24}, extent = {{10, -10}, {-10, 10}})));
-    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(redeclare package Medium = Medium1, height = 2, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium1, HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, HX_1 = true) annotation(
-      Placement(transformation(origin = {-6, 88}, extent = {{10, -10}, {-10, 10}})));
-    BuildingSystems.Fluid.Movers.FlowControlled_dp pump11(redeclare package Medium = Medium1, m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true, p_start = 1.5e5) annotation(
-      Placement(transformation(origin = {-2, 124}, extent = {{-10, -10}, {10, 10}})));
-    Modelica.Blocks.Sources.Constant dpSet1(k = 150000.0) annotation(
-      Placement(transformation(origin = {226, 130}, extent = {{-204, 18}, {-216, 30}})));
+    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(redeclare package Medium = Medium1, height = 2, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium1, HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, HX_1 = true, UA_HX_1 = 5000, V = 2) annotation(
+      Placement(transformation(origin = {4, 88}, extent = {{10, -10}, {-10, 10}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort radTemp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {78, 124}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort temp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
-      Placement(transformation(origin = {38, 62}, extent = {{-10, -10}, {10, 10}})));
-  BuildingSystems.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
-      Placement(transformation(origin = {20, 124}, extent = {{-10, -10}, {10, 10}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TBCCon1(T(displayUnit = "K") = 283.15) annotation(
-      Placement(transformation(origin = {42, 144}, extent = {{-32, 28}, {-20, 40}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TBCRad1(T(displayUnit = "K") = 283.15) annotation(
-      Placement(transformation(origin = {42, 144}, extent = {{-32, 48}, {-20, 60}})));
-  BuildingSystems.Fluid.Storage.ExpansionVessel exp1(redeclare package Medium = Medium1, T_start = 283.15, V_start = 0.1, p_start = 1.5e5) annotation(
-      Placement(transformation(origin = {108, 114}, extent = {{-10, -10}, {10, 10}})));
+      Placement(transformation(origin = {28, 44}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {-24, 110}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Storage.ExpansionVessel exp1(redeclare package Medium = Medium1, T_start = 283.15, V_start = 0.1, p_start = 1.5e5) annotation(
+      Placement(transformation(origin = {106, 82}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort radTempIN(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {28, 124}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.MixingVolumes.MixingVolume room(redeclare package Medium = Medium2, m_flow_nominal = 300*2*1.2/3600, V = 1176) annotation(
+      Placement(transformation(origin = {78, 183}, extent = {{-8, -7}, {8, 7}})));
+    Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heatCapacitor(C = 4.254e6) annotation(
+      Placement(transformation(origin = {60, 212}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalConductor(G = 600) annotation(
+      Placement(transformation(origin = {2, 184}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature prescribedTemperature annotation(
+      Placement(transformation(origin = {-28, 184}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Blocks.Sources.Constant tempOut(k = 273.15 + 10.0) annotation(
+      Placement(transformation(origin = {-94, 310}, extent = {{44, -112}, {36, -104}})));
+    Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor tempRoom annotation(
+      Placement(transformation(origin = {104, 198}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Logical.Hysteresis hysRad(uHigh = 273.15 + 25, uLow = 273.15 + 21, pre_y_start = false) annotation(
+      Placement(transformation(origin = {230, 310}, extent = {{-80, -120}, {-60, -100}})));
+  Modelica.Blocks.Logical.Not not1 annotation(
+      Placement(transformation(origin = {232, 310}, extent = {{-40, -120}, {-20, -100}})));
+  Modelica.Blocks.Math.BooleanToInteger booToInt annotation(
+      Placement(transformation(origin = {230, 318}, extent = {{0, -160}, {20, -140}})));
+  BuildingSystems.Fluid.Movers.FlowControlled_m_flow pumpRad(energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState, m_flow_nominal = 0.357, inputType = BuildingSystems.Fluid.Types.InputType.Stages, redeclare package Medium = Medium1)  annotation(
+      Placement(transformation(origin = {0, 124}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Logical.Hysteresis hysRad1(uHigh = 273.15 + 60, uLow = 273.15 + 50, pre_y_start = true) annotation(
+      Placement(transformation(origin = {-102, 258}, extent = {{-80, -120}, {-60, -100}})));
+  Modelica.Blocks.Logical.Not not11 annotation(
+      Placement(transformation(origin = {-100, 258}, extent = {{-40, -120}, {-20, -100}})));
+  Modelica.Blocks.Math.BooleanToInteger booToInt1 annotation(
+      Placement(transformation(origin = {-102, 266}, extent = {{0, -160}, {20, -140}})));
+  BuildingSystems.Fluid.Movers.FlowControlled_m_flow pumpRad1(energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState, inputType = BuildingSystems.Fluid.Types.InputType.Stages, m_flow_nominal = 0.2, redeclare package Medium = Medium1) annotation(
+      Placement(transformation(origin = {-68, 84}, extent = {{-10, -10}, {10, 10}})));
   equation
     connect(TSet.y, heatPump.TSet) annotation(
       Line(points = {{42, 22}, {42, 15}, {12, 15}}, color = {0, 0, 127}));
-    connect(heatPump.port_b1, pump1.port_a) annotation(
-      Line(points = {{-10, 12}, {-76, 12}, {-76, 56}, {-62, 56}}, color = {0, 127, 255}));
     connect(exp.port_a, heatPump.port_a1) annotation(
-      Line(points = {{88, 62}, {88, 12}, {10, 12}}, color = {0, 127, 255}));
-    connect(dpSet.y, pump1.dp_in) annotation(
-      Line(points = {{-47, 138}, {-47, 68}, {-52, 68}}, color = {0, 0, 127}));
-    connect(dpSet1.y, pump11.dp_in) annotation(
-      Line(points = {{10, 154}, {-2, 154}, {-2, 136}}, color = {0, 0, 127}));
+      Line(points = {{102, 44}, {102, 12}, {10, 12}}, color = {0, 127, 255}));
     connect(temp.port_b, exp.port_a) annotation(
-      Line(points = {{48, 62}, {88, 62}}, color = {0, 127, 255}));
+      Line(points = {{38, 44}, {102, 44}}, color = {0, 127, 255}));
     connect(radTemp.port_a, radiator.port_b) annotation(
-      Line(points = {{68, 124}, {56, 124}}, color = {0, 127, 255}));
+      Line(points = {{68, 124}, {64, 124}}, color = {0, 127, 255}));
     connect(heatPump.port_a2, boundary.ports[1]) annotation(
       Line(points = {{-10, 0}, {-56, 0}, {-56, -24}, {-48, -24}}, color = {0, 127, 255}));
     connect(heatPump.port_b2, bou1.ports[1]) annotation(
       Line(points = {{10, 0}, {20, 0}, {20, -22}, {10, -22}}, color = {0, 127, 255}));
-    connect(pump11.port_b, senTem.port_a) annotation(
-      Line(points = {{8, 124}, {10, 124}}, color = {0, 127, 255}));
-    connect(senTem.port_b, radiator.port_a) annotation(
-      Line(points = {{30, 124}, {36, 124}}, color = {0, 127, 255}));
-    connect(radiator.heatPortCon, TBCCon1.port) annotation(
-      Line(points = {{44, 132}, {44, 178}, {22, 178}}, color = {191, 0, 0}));
-    connect(radiator.heatPortRad, TBCRad1.port) annotation(
-      Line(points = {{48, 132}, {48, 198}, {22, 198}}, color = {191, 0, 0}));
-    connect(pump1.port_b, storage.port_a1) annotation(
-      Line(points = {{-42, 56}, {1, 56}, {1, 79}}, color = {0, 127, 255}));
-    connect(storage.port_b1, temp.port_a) annotation(
-      Line(points = {{1, 97}, {28, 97}, {28, 62}}, color = {0, 127, 255}));
-    connect(storage.port_HX_1_a, pump11.port_a) annotation(
-      Line(points = {{-13, 84}, {-30, 84}, {-30, 124}, {-12, 124}}, color = {0, 127, 255}));
-    connect(radTemp.port_b, storage.port_HX_1_b) annotation(
-      Line(points = {{88, 124}, {88, 104}, {-24, 104}, {-24, 82}, {-13, 82}}, color = {0, 127, 255}));
-    connect(exp1.port_a, storage.port_HX_1_b) annotation(
-      Line(points = {{108, 104}, {-24, 104}, {-24, 82}, {-13, 82}}, color = {0, 127, 255}));
+    connect(storage.port_HX_1_b, temp.port_a) annotation(
+      Line(points = {{-3, 82}, {-26, 82}, {-26, 44}, {18, 44}}, color = {0, 127, 255}));
+    connect(radiator.port_a, radTempIN.port_b) annotation(
+      Line(points = {{44, 124}, {38, 124}}, color = {0, 127, 255}));
+    connect(radiator.heatPortCon, room.heatPort) annotation(
+      Line(points = {{52, 132}, {52, 183}, {70, 183}}, color = {191, 0, 0}));
+    connect(radiator.heatPortRad, room.heatPort) annotation(
+      Line(points = {{56, 132}, {60, 132}, {60, 183}, {70, 183}}, color = {191, 0, 0}));
+    connect(heatCapacitor.port, room.heatPort) annotation(
+      Line(points = {{60, 202}, {70, 202}, {70, 184}}, color = {191, 0, 0}));
+    connect(room.heatPort, thermalConductor.port_b) annotation(
+      Line(points = {{70, 184}, {12, 184}}, color = {191, 0, 0}));
+    connect(thermalConductor.port_a, prescribedTemperature.port) annotation(
+      Line(points = {{-8, 184}, {-18, 184}}, color = {191, 0, 0}));
+    connect(tempOut.y, prescribedTemperature.T) annotation(
+      Line(points = {{-58, 202}, {-64, 202}, {-64, 184}, {-40, 184}}, color = {0, 0, 127}));
+    connect(tempRoom.port, room.heatPort) annotation(
+      Line(points = {{94, 198}, {70, 198}, {70, 184}}, color = {191, 0, 0}));
+    connect(tempRoom.T, hysRad.u) annotation(
+      Line(points = {{116, 198}, {148, 198}, {148, 200}}, color = {0, 0, 127}));
+    connect(hysRad.y, not1.u) annotation(
+      Line(points = {{172, 200}, {190, 200}}, color = {255, 0, 255}));
+    connect(not1.y, booToInt.u) annotation(
+      Line(points = {{214, 200}, {222, 200}, {222, 168}, {228, 168}}, color = {255, 0, 255}));
+    connect(senTem.port_a, pumpRad.port_a) annotation(
+      Line(points = {{-34, 110}, {-40, 110}, {-40, 124}, {-10, 124}}, color = {0, 127, 255}));
+    connect(pumpRad.port_b, radTempIN.port_a) annotation(
+      Line(points = {{10, 124}, {18, 124}}, color = {0, 127, 255}));
+    connect(booToInt.y, pumpRad.stage) annotation(
+      Line(points = {{251, 168}, {260, 168}, {260, 150}, {0, 150}, {0, 136}}, color = {255, 127, 0}));
+    connect(hysRad1.y, not11.u) annotation(
+      Line(points = {{-161, 148}, {-143, 148}}, color = {255, 0, 255}));
+    connect(not11.y, booToInt1.u) annotation(
+      Line(points = {{-119, 148}, {-111, 148}, {-111, 116}, {-105, 116}}, color = {255, 0, 255}));
+    connect(storage.port_HX_1_a, pumpRad1.port_b) annotation(
+      Line(points = {{-3, 84}, {-58, 84}}, color = {0, 127, 255}));
+    connect(pumpRad1.port_a, heatPump.port_b1) annotation(
+      Line(points = {{-78, 84}, {-86, 84}, {-86, 12}, {-10, 12}}, color = {0, 127, 255}));
+    connect(storage.port_b1, senTem.port_b) annotation(
+      Line(points = {{11, 97}, {-14, 97}, {-14, 110}}, color = {0, 127, 255}));
+    connect(storage.port_a1, radTemp.port_b) annotation(
+      Line(points = {{11, 79}, {88, 79}, {88, 124}}, color = {0, 127, 255}));
+    connect(exp1.port_a, storage.port_a1) annotation(
+      Line(points = {{106, 72}, {11, 72}, {11, 79}}, color = {0, 127, 255}));
+    connect(booToInt1.y, pumpRad1.stage) annotation(
+      Line(points = {{-80, 116}, {-68, 116}, {-68, 96}}, color = {255, 127, 0}));
+    connect(storage.T[1], hysRad1.u) annotation(
+      Line(points = {{12, 94}, {18, 94}, {18, 58}, {-194, 58}, {-194, 148}, {-184, 148}}, color = {0, 0, 127}));
     annotation(
-      Diagram(coordinateSystem(extent = {{-80, 220}, {120, -40}})));
+      Diagram(coordinateSystem(extent = {{-200, 260}, {260, -40}})));
   end TestBuildingSystemes2;
 
   model CommunitySystem "Photovoltaic cooling system"
@@ -604,7 +646,7 @@ First implementation.
       Placement(transformation(origin = {36, -26}, extent = {{-10, -10}, {10, 10}})));
     Modelica.Blocks.Sources.Constant dpSet(k = 150000.0) annotation(
       Placement(transformation(origin = {254, -22}, extent = {{-204, 18}, {-216, 30}})));
-    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium2, height = 2, thickness_wall = 0.1) annotation(
+    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium1, height = 2, thickness_wall = 0.1) annotation(
       Placement(transformation(origin = {72, -22}, extent = {{10, -10}, {-10, 10}})));
     Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 70.0) annotation(
       Placement(transformation(origin = {62, 56}, extent = {{44, -112}, {36, -104}})));
@@ -681,8 +723,6 @@ First implementation.
       Line(points = {{210, 20}, {198, 20}}, color = {0, 127, 255}));
     connect(radTemp.port_b, exp1.port_a) annotation(
       Line(points = {{230, 20}, {256, 20}}, color = {0, 127, 255}));
-    connect(storage.port_a1, pump11.port_a) annotation(
-      Line(points = {{79, -31}, {86, -31}, {86, 20}, {142, 20}}, color = {0, 127, 255}));
     connect(exp1.port_a, storage.port_a2) annotation(
       Line(points = {{256, 20}, {256, -6}, {65, -6}, {65, -13}}, color = {0, 127, 255}));
     connect(radiator.heatPortRad, building.conHeatSourcesPorts[1]) annotation(
@@ -693,6 +733,8 @@ First implementation.
       Line(points = {{8, -88}, {0, -88}, {0, 48}, {66, 48}}, color = {0, 0, 127}));
     connect(battery.PLoad, heatPump.P) annotation(
       Line(points = {{-18, -74}, {60, -74}}, color = {0, 0, 127}));
+    connect(pump11.port_a, storage.port_b2) annotation(
+      Line(points = {{142, 20}, {86, 20}, {86, -36}, {66, -36}, {66, -30}}, color = {0, 127, 255}));
     annotation(
       experiment(StartTime = 0, StopTime = 31536000),
       __Dymola_Commands(file = "modelica://BuildingSystems/Resources/Scripts/Dymola/Applications/AirConditioningSystems/PhotovoltaicCoolingSystem.mos" "Simulate and plot"),
@@ -752,35 +794,41 @@ First implementation.
     BuildingSystems.Fluid.HeatPumps.Carnot_TCon heatPump(redeclare package Medium1 = Medium1, redeclare package Medium2 = Medium2, QCon_flow_nominal = 5000, allowFlowReversal1 = false, allowFlowReversal2 = false, dTCon_nominal = dTCon_nominal, dTEva_nominal = dTEva_nominal, dp1_nominal = 1000, dp2_nominal = 1000, show_T = true) annotation(
       Placement(transformation(origin = {70, -74}, extent = {{10, -10}, {-10, 10}})));
     BuildingSystems.Fluid.Movers.FlowControlled_dp pump1(redeclare package Medium = Medium1, addPowerToMedium = false, m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true) annotation(
-      Placement(transformation(origin = {36, -26}, extent = {{-10, -10}, {10, 10}})));
+      Placement(transformation(origin = {20, -26}, extent = {{-10, -10}, {10, 10}})));
     Modelica.Blocks.Sources.Constant dpSet(k = 150000.0) annotation(
       Placement(transformation(origin = {254, -22}, extent = {{-204, 18}, {-216, 30}})));
-    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium2, height = 2, thickness_wall = 0.1, HX_1 = true) annotation(
-      Placement(transformation(origin = {74, -22}, extent = {{10, -10}, {-10, 10}})));
-    Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 70.0) annotation(
+    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium1, height = 2, thickness_wall = 0.1, HX_1 = true, UA_HX_1 = 10000, V = 10, nEle = 10) annotation(
+      Placement(transformation(origin = {76, -20}, extent = {{10, -10}, {-10, 10}})));
+    Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 60.0) annotation(
       Placement(transformation(origin = {62, 56}, extent = {{44, -112}, {36, -104}})));
     BuildingSystems.Fluid.Storage.ExpansionVessel exp(redeclare package Medium = Medium1, V_start = 2, p_start = 2e5, T_start = 283.15) annotation(
       Placement(transformation(origin = {164, -58}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort temp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {122, -28}, extent = {{-10, -10}, {10, 10}})));
-    BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 6000, TAir_nominal(displayUnit = "K"), TRad_nominal(displayUnit = "K"), T_a_nominal(displayUnit = "K") = 308.15, T_b_nominal(displayUnit = "K") = 298.15, dp_nominal = 1000, m_flow_nominal = 0.5, p_start = 1.5e5) annotation(
-      Placement(transformation(origin = {188, 20}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Storage.ExpansionVessel exp1(redeclare package Medium = Medium1, V_start = 0.1, p_start = 1.5e5) annotation(
-      Placement(transformation(origin = {256, 30}, extent = {{-10, -10}, {10, 10}})));
+      Placement(transformation(origin = {254, 16}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Movers.FlowControlled_dp pump11(redeclare package Medium = Medium1, addPowerToMedium = false, m_flow_nominal = 0.1, nominalValuesDefineDefaultPressureCurve = true, p_start = 150000) annotation(
-      Placement(transformation(origin = {152, 20}, extent = {{-10, -10}, {10, 10}})));
+      Placement(transformation(origin = {142, 20}, extent = {{-10, -10}, {10, 10}})));
     Modelica.Blocks.Sources.Constant dpSet1(k = 150000.0) annotation(
       Placement(transformation(origin = {380, 26}, extent = {{-204, 18}, {-216, 30}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort radTemp(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {220, 20}, extent = {{-10, -10}, {10, 10}})));
-    Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T = 283.15) annotation(
-      Placement(transformation(extent = {{108, 102}, {128, 122}})));
-    Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalConductor(G = 10000) annotation(
-      Placement(transformation(extent = {{156, 104}, {176, 124}})));
-    Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalConductor1(G = 1000) annotation(
-      Placement(transformation(extent = {{156, 80}, {176, 100}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
-      Placement(transformation(origin = {112, 10}, extent = {{-10, -10}, {10, 10}})));
+      Placement(transformation(origin = {110, 10}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort tempinHX(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {44, -26}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort senTemIN(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {170, 20}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.HeatExchangers.ConstantEffectiveness hex(redeclare package Medium1 = BuildingSystems.Media.Air "Moist air", redeclare package Medium2 = BuildingSystems.Media.Water "Water", m1_flow_nominal = 5, m2_flow_nominal = 6.12, dp1_nominal = 100, dp2_nominal = 1000, redeclare package Medium = BuildingSystems.Media.Water "Water") annotation(
+      Placement(transformation(origin = {196, 26}, extent = {{10, -10}, {-10, 10}}, rotation = -0)));
+    BuildingSystems.Fluid.Sources.Boundary_pT bou(nPorts = 1, redeclare package Medium2 = Medium2, redeclare package Medium = BuildingSystems.Media.Air "Moist air") annotation(
+      Placement(transformation(origin = {134, 80}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sources.MassFlowSource_T boundary1(nPorts = 1, redeclare package Medium2 = Medium2, redeclare package Medium = BuildingSystems.Media.Air "Moist air", m_flow = 2, T = 293.15) annotation(
+      Placement(transformation(origin = {250, 80}, extent = {{10, -10}, {-10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort TempRoomIN(redeclare package Medium = BuildingSystems.Media.Air "Moist air", m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {222, 80}, extent = {{-10, -10}, {10, 10}})));
+    BuildingSystems.Fluid.Sensors.TemperatureTwoPort TempRoomOUT(redeclare package Medium = BuildingSystems.Media.Air "Moist air", m_flow_nominal = 0.1) annotation(
+      Placement(transformation(origin = {166, 80}, extent = {{-10, -10}, {10, 10}})));
   equation
     der(EGrid) = battery.PGrid;
     der(EPVField) = pvField.PField;
@@ -819,9 +867,9 @@ First implementation.
     connect(heatPump.port_a2, boundary.ports[1]) annotation(
       Line(points = {{60, -80}, {45, -80}, {45, -92}, {30, -92}}, color = {0, 127, 255}));
     connect(dpSet.y, pump1.dp_in) annotation(
-      Line(points = {{37.4, 2}, {37.4, -14}, {36, -14}}, color = {0, 0, 127}));
+      Line(points = {{37.4, 2}, {37.4, -14}, {20, -14}}, color = {0, 0, 127}));
     connect(heatPump.port_b1, pump1.port_a) annotation(
-      Line(points = {{60, -68}, {8, -68}, {8, -26}, {26, -26}}, color = {0, 127, 255}));
+      Line(points = {{60, -68}, {8, -68}, {8, -26}, {10, -26}}, color = {0, 127, 255}));
     connect(temp.port_b, heatPump.port_a1) annotation(
       Line(points = {{132, -28}, {148, -28}, {148, -68}, {80, -68}}, color = {0, 127, 255}));
     connect(TSet.y, heatPump.TSet) annotation(
@@ -829,39 +877,43 @@ First implementation.
     connect(exp.port_a, heatPump.port_a1) annotation(
       Line(points = {{164, -68}, {80, -68}}, color = {0, 127, 255}));
     connect(dpSet1.y, pump11.dp_in) annotation(
-      Line(points = {{163.4, 50}, {152, 50}, {152, 32}}, color = {0, 0, 127}));
+      Line(points = {{163.4, 50}, {152, 50}, {152, 32}, {142, 32}}, color = {0, 0, 127}));
     connect(boundary.T_in, ambience.TAirRef) annotation(
       Line(points = {{8, -88}, {0, -88}, {0, 47}, {65, 47}}, color = {0, 0, 127}));
     connect(battery.PLoad, heatPump.P) annotation(
       Line(points = {{-17, -74}, {59, -74}}, color = {0, 0, 127}));
-    connect(fixedTemperature.port, thermalConductor.port_a) annotation(
-      Line(points = {{128, 112}, {144, 112}, {144, 114}, {156, 114}}, color = {191, 0, 0}, smooth = Smooth.Bezier));
-    connect(thermalConductor1.port_a, fixedTemperature.port) annotation(
-      Line(points = {{156, 90}, {138, 90}, {138, 112}, {128, 112}}, color = {191, 0, 0}, smooth = Smooth.Bezier));
-    connect(thermalConductor1.port_b, radiator.heatPortCon) annotation(
-      Line(points = {{176, 90}, {182, 90}, {186, 90}, {186, 27.2}}, color = {191, 0, 0}, smooth = Smooth.Bezier));
-    connect(thermalConductor.port_b, radiator.heatPortRad) annotation(
-      Line(points = {{176, 114}, {184, 114}, {190, 114}, {190, 27.2}}, color = {191, 0, 0}, smooth = Smooth.Bezier));
     connect(senTem.port_b, pump11.port_a) annotation(
-      Line(points = {{122, 10}, {132, 10}, {132, 20}, {142, 20}}, color = {0, 127, 255}));
-    connect(radiator.port_a, pump11.port_b) annotation(
-      Line(points = {{178, 20}, {162, 20}}, color = {0, 127, 255}));
-    connect(radiator.port_b, radTemp.port_a) annotation(
-      Line(points = {{198, 20}, {210, 20}}, color = {0, 127, 255}));
-  connect(pump1.port_b, storage.port_HX_1_a) annotation(
-      Line(points = {{46, -26}, {68, -26}}, color = {0, 127, 255}));
-  connect(storage.port_HX_1_b, temp.port_a) annotation(
-      Line(points = {{68, -28}, {54, -28}, {54, -42}, {100, -42}, {100, -28}, {112, -28}}, color = {0, 127, 255}));
-  connect(storage.port_a2, radTemp.port_b) annotation(
-      Line(points = {{68, -12}, {68, -6}, {230, -6}, {230, 20}}, color = {0, 127, 255}));
-  connect(exp1.port_a, storage.port_a2) annotation(
-      Line(points = {{256, 20}, {256, -6}, {68, -6}, {68, -12}}, color = {0, 127, 255}));
-  connect(storage.port_b2, senTem.port_a) annotation(
-      Line(points = {{68, -30}, {68, -36}, {86, -36}, {86, 10}, {102, 10}}, color = {0, 127, 255}));
+      Line(points = {{120, 10}, {132, 10}, {132, 20}}, color = {0, 127, 255}));
+    connect(storage.port_HX_1_b, temp.port_a) annotation(
+      Line(points = {{69, -26}, {54, -26}, {54, -42}, {100, -42}, {100, -28}, {112, -28}}, color = {0, 127, 255}));
+    connect(pump1.port_b, tempinHX.port_a) annotation(
+      Line(points = {{30, -26}, {34, -26}}, color = {0, 127, 255}));
+    connect(tempinHX.port_b, storage.port_HX_1_a) annotation(
+      Line(points = {{54, -26}, {61, -26}, {61, -24}, {69, -24}}, color = {0, 127, 255}));
+    connect(senTemIN.port_a, pump11.port_b) annotation(
+      Line(points = {{160, 20}, {152, 20}}, color = {0, 127, 255}));
+    connect(senTem.port_a, storage.port_a2) annotation(
+      Line(points = {{100, 10}, {69, 10}, {69, -11}}, color = {0, 127, 255}));
+    connect(storage.port_b2, radTemp.port_b) annotation(
+      Line(points = {{69, -29}, {69, -36}, {94, -36}, {94, -10}, {230, -10}, {230, 20}}, color = {0, 127, 255}));
+    connect(exp1.port_a, storage.port_b2) annotation(
+      Line(points = {{254, 6}, {254, -29}, {69, -29}}, color = {0, 127, 255}));
+    connect(hex.port_a2, senTemIN.port_b) annotation(
+      Line(points = {{186, 20}, {180, 20}}, color = {0, 127, 255}));
+    connect(hex.port_b2, radTemp.port_a) annotation(
+      Line(points = {{206, 20}, {210, 20}}, color = {0, 127, 255}));
+    connect(boundary1.ports[1], TempRoomIN.port_b) annotation(
+      Line(points = {{240, 80}, {232, 80}}, color = {0, 127, 255}));
+    connect(TempRoomIN.port_a, hex.port_a1) annotation(
+      Line(points = {{212, 80}, {206, 80}, {206, 32}}, color = {0, 127, 255}));
+    connect(bou.ports[1], TempRoomOUT.port_a) annotation(
+      Line(points = {{144, 80}, {156, 80}}, color = {0, 127, 255}));
+    connect(TempRoomOUT.port_b, hex.port_b1) annotation(
+      Line(points = {{176, 80}, {186, 80}, {186, 32}}, color = {0, 127, 255}));
     annotation(
       experiment(StartTime = 5184000, StopTime = 15552000, __Dymola_NumberOfIntervals = 1500, __Dymola_Algorithm = "Dassl"),
       __Dymola_Commands(file = "modelica://BuildingSystems/Resources/Scripts/Dymola/Applications/AirConditioningSystems/PhotovoltaicCoolingSystem.mos" "Simulate and plot"),
-      Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-80, 80}, {280, -120}})),
+      Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-80, 140}, {280, -100}})),
       Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -40}, {100, 40}})),
       Documentation(info = "<html>
   <p>
