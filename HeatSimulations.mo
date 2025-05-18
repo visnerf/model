@@ -621,17 +621,17 @@ First implementation.
     parameter Modelica.Units.SI.HeatFlowRate QCon_flow_nominal = 20E3 "Evaporator heat flow rate, změněno ze 100";
     parameter Modelica.Units.SI.MassFlowRate m1_flow_nominal = QCon_flow_nominal/dTCon_nominal/4200 "Nominal mass flow rate at condenser";
     parameter Modelica.Units.SI.MassFlowRate m_flow_nominal = 0.5 "Nominal mass flow rate";
-    BuildingSystems.Technologies.Photovoltaics.PVModules.PVModuleSimpleMPP pvField(redeclare BuildingSystems.Technologies.Photovoltaics.Data.PhotovoltaicModules.TSM230PC05 pvModuleData, angleDegTil_constant = 30.0, angleDegAzi_constant = 0.0, nModPar = 40, nModSer = 2) annotation(
+    BuildingSystems.Technologies.Photovoltaics.PVModules.PVModuleSimpleMPP pvField(redeclare BuildingSystems.Technologies.Photovoltaics.Data.PhotovoltaicModules.ASE300DGFT315Wp pvModuleData, angleDegTil_constant = 30.0, angleDegAzi_constant = 0.0, nModPar = 11, nModSer = 5) "Tolik panelů, že to zpalní střechu 140m^2" annotation(
       Placement(transformation(origin = {18, -14}, extent = {{-54, -18}, {-34, 2}})));
     BuildingSystems.Climate.SolarRadiationTransformers.SolarRadiationTransformerIsotropicSky radiation(rhoAmb = 0.2, angleDegL = 0.0) annotation(
       Placement(transformation(origin = {18, -14}, extent = {{-72, 12}, {-52, 32}})));
-    BuildingSystems.Technologies.ElectricalStorages.BatterySimple battery(redeclare BuildingSystems.Technologies.ElectricalStorages.Data.LeadAcid.LeadAcidGeneric batteryData, nBat = 6) annotation(
+    BuildingSystems.Technologies.ElectricalStorages.BatterySimple battery(redeclare BuildingSystems.Technologies.ElectricalStorages.Data.LithiumIon.LithiumIonTeslaPowerwall2 batteryData, nBat = 1) annotation(
       Placement(transformation(origin = {10, -72}, extent = {{-38, -10}, {-18, 10}})));
-    BuildingSystems.Buildings.BuildingTemplates.Building1Zone1DDistrict building(calcIdealLoads = false, heatSources = true, nHeatSources = 1, angleDegAziBuilding = 0.0, width = 10, length = 14, heightSto = 2.8, nSto = 3, ARoom = 70, widthWindow1 = 6, heightWindow1 = 2*1.2, widthWindow2 = 6, heightWindow2 = 2*1.2, widthWindow3 = 6, heightWindow3 = 2*1.2, widthWindow4 = 6, heightWindow4 = 2*1.2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall3, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.OuterWallMultistorey1958to1968 constructionWall4, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.BasePlateMultistorey1958to1968 constructionBottom, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallMultistorey1958to1968 constructionWallsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateCeilingMultistorey1958to1968 constructionCeilingsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow2, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow3, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow4, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.SingleGlazing constructionWindow1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.RoofRowhouse1918 constructionCeiling, BCWall1 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall2 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall3 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall4 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCCeiling = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, nZones = 1) "6 bytů. každý 70m^2" annotation(
+    BuildingSystems.Buildings.BuildingTemplates.Building1Zone1DDistrict building(calcIdealLoads = false, heatSources = true, nHeatSources = 1, angleDegAziBuilding = 0.0, width = 10, length = 14, heightSto = 2.8, nSto = 3, ARoom = 70, widthWindow1 = 4, heightWindow1 = 2*1.2, widthWindow2 = 4, heightWindow2 = 2*1.2, widthWindow3 = 4, heightWindow3 = 2*1.2, widthWindow4 = 4, heightWindow4 = 2*1.2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallSingle2014 constructionWall1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallSingle2014 constructionWall2, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallSingle2014 constructionWall3, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallSingle2014 constructionWall4, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.BasePlateSingle2014 constructionBottom, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateWallMultistorey1958to1968 constructionWallsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateCeilingMultistorey1958to1968 constructionCeilingsInterior, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow2, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow3, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow4, redeclare BuildingSystems.Buildings.Data.Constructions.Transparent.DoubleGlazing constructionWindow1, redeclare BuildingSystems.Buildings.Data.Constructions.Thermal.IntermediateCeilingSingle2014 constructionCeiling, BCWall1 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall2 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall3 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCWall4 = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, BCCeiling = BuildingSystems.Buildings.Types.ThermalBoundaryCondition.Ambience, nZones = 1) "6 bytů. každý 70m^2" annotation(
       Placement(transformation(origin = {18, -14}, extent = {{88, 30}, {108, 50}})));
     BuildingSystems.Buildings.Ambience ambience(nSurfaces = building.nSurfacesAmbience, redeclare block WeatherData = BuildingSystems.Climate.WeatherDataMeteonorm.Germany_Berlin_Meteonorm_ASCII) "Ambience model" annotation(
       Placement(transformation(origin = {18, -14}, extent = {{64, 30}, {84, 50}})));
-    Modelica.Blocks.Sources.Constant airchange(k = 1) "větrání, kolikrát za hodinu se vymění objem vzducuhu v budově" annotation(
+    Modelica.Blocks.Sources.Constant airchange(k = 0.5) "větrání, kolikrát za hodinu se vymění objem vzducuhu v budově" annotation(
       Placement(transformation(origin = {134, 30}, extent = {{-2, -2}, {2, 2}}, rotation = 180)));
     Modelica.Units.SI.Energy EGrid(start = 0.0) "Integrates the electricity taken from the grid";
     Modelica.Units.SI.Energy EPVField(start = 0.0) "Integrates the electricity generated by the PV field";
@@ -639,7 +639,7 @@ First implementation.
       Placement(transformation(origin = {132, -132}, extent = {{10, -10}, {-10, 10}})));
     Modelica.Blocks.Sources.Constant TSet(k = 273.15 + 70.0) annotation(
       Placement(transformation(origin = {140, -6}, extent = {{44, -112}, {36, -104}})));
-    BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 22000, TAir_nominal(displayUnit = "degC") = 294.15, TRad_nominal(displayUnit = "K"), T_a_nominal = 273.15 + 50, T_b_nominal = 273.15 + 40, dp_nominal = 100) annotation(
+    BuildingSystems.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 radiator(redeclare package Medium = Medium1, Q_flow_nominal = 40000, TAir_nominal(displayUnit = "degC") = 294.15, TRad_nominal(displayUnit = "K"), T_a_nominal = 273.15 + 50, T_b_nominal = 273.15 + 40, dp_nominal = 100) annotation(
       Placement(transformation(origin = {188, -26}, extent = {{-10, -10}, {10, 10}})));
     BuildingSystems.Fluid.Storage.ExpansionVessel expHP(redeclare package Medium = Medium1, T_start = 283.15, V_start = 1, p_start = 2e5) annotation(
       Placement(transformation(origin = {202, -92}, extent = {{-10, -10}, {10, 10}})));
@@ -647,7 +647,7 @@ First implementation.
       Placement(transformation(origin = {182, -148}, extent = {{10, -10}, {-10, 10}})));
     BuildingSystems.Fluid.Sources.MassFlowSource_T boundary(redeclare package Medium = Medium2, T = 283.15, m_flow = 0.5, nPorts = 1, use_T_in = true) annotation(
       Placement(transformation(origin = {88, -150}, extent = {{-10, -10}, {10, 10}})));
-    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_1 = true, HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium1, UA_HX_1 = 5000, V = 4, height = 2) annotation(
+    BuildingSystems.Technologies.ThermalStorages.FluidStorage storage(HX_1 = true, HX_2 = false, redeclare BuildingSystems.Technologies.ThermalStorages.BaseClasses.BuoyancyModels.Buoyancy1 HeatBuoyancy, redeclare package Medium = Medium1, redeclare package Medium_HX_1 = Medium1, redeclare package Medium_HX_2 = Medium1, UA_HX_1 = 3000, V = 8, height = 2) annotation(
       Placement(transformation(origin = {136, -62}, extent = {{10, -10}, {-10, 10}})));
     BuildingSystems.Fluid.Sensors.TemperatureTwoPort tempRadOUT(redeclare package Medium = Medium1, m_flow_nominal = 0.1) annotation(
       Placement(transformation(origin = {212, -26}, extent = {{-10, -10}, {10, 10}})));
@@ -665,7 +665,7 @@ First implementation.
       Placement(transformation(origin = {122, 64}, extent = {{-24, -72}, {-12, -60}})));
     Modelica.Blocks.Math.BooleanToInteger booToInt annotation(
       Placement(transformation(origin = {118, 88}, extent = {{0, -96}, {12, -84}})));
-    BuildingSystems.Fluid.Movers.FlowControlled_m_flow pumpRad(redeclare package Medium = Medium1, energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState, inputType = BuildingSystems.Fluid.Types.InputType.Stages, m_flow_nominal = 0.3) annotation(
+    BuildingSystems.Fluid.Movers.FlowControlled_m_flow pumpRad(redeclare package Medium = Medium1, energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState, inputType = BuildingSystems.Fluid.Types.InputType.Stages, m_flow_nominal = 0.5) annotation(
       Placement(transformation(origin = {134, -26}, extent = {{-10, -10}, {10, 10}})));
     Modelica.Blocks.Logical.Hysteresis hysRad1(pre_y_start = true, uHigh = 273.15 + 60, uLow = 273.15 + 50) annotation(
       Placement(transformation(origin = {70, 34}, extent = {{-48, -72}, {-36, -60}})));
@@ -673,7 +673,7 @@ First implementation.
       Placement(transformation(origin = {68, 34}, extent = {{-24, -72}, {-12, -60}})));
     Modelica.Blocks.Math.BooleanToInteger booToInt1 annotation(
       Placement(transformation(origin = {64, 42}, extent = {{0, -80}, {10, -70}})));
-    BuildingSystems.Fluid.Movers.FlowControlled_m_flow pumpHP(redeclare package Medium = Medium1, energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState, inputType = BuildingSystems.Fluid.Types.InputType.Stages, m_flow_nominal = 0.1) annotation(
+    BuildingSystems.Fluid.Movers.FlowControlled_m_flow pumpHP(redeclare package Medium = Medium1, energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState, inputType = BuildingSystems.Fluid.Types.InputType.Stages, m_flow_nominal = 0.2) annotation(
       Placement(transformation(origin = {84, -66}, extent = {{-10, -10}, {10, 10}})));
   equation
     der(EGrid) = battery.PGrid;
@@ -737,7 +737,7 @@ First implementation.
     connect(storage.port_b1, tempStorageOUT.port_b) annotation(
       Line(points = {{143, -53}, {118, -53}, {118, -40}, {120, -40}}, color = {0, 127, 255}));
     connect(storage.port_a1, tempRadOUT.port_b) annotation(
-      Line(points = {{143, -71}, {220, -71}, {220, -26}, {222, -26}}, color = {0, 127, 255}));
+      Line(points = {{143, -71}, {230, -71}, {230, -26}, {222, -26}}, color = {0, 127, 255}));
     connect(expRad.port_a, storage.port_a1) annotation(
       Line(points = {{240, -78}, {145, -78}, {145, -71}, {143, -71}}, color = {0, 127, 255}));
     connect(booToInt1.y, pumpHP.stage) annotation(
